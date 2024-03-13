@@ -15,7 +15,7 @@ LONG_BREAK_MIN = 20
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 def start_timer():
-    count_down(1 * 60)
+    count_down(WORK_MIN * 60)
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
 def count_down(count):
