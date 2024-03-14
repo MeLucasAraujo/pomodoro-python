@@ -7,12 +7,21 @@ RED = "#e7305b"
 GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
-WORK_MIN = 25
-SHORT_BREAK_MIN = 5
-LONG_BREAK_MIN = 20
+WORK_MIN = 0.05
+SHORT_BREAK_MIN = 0.05
+LONG_BREAK_MIN = 0.5
 REPS = 0
+TIMER = None
 
 # ---------------------------- TIMER RESET ------------------------------- # 
+def reset_timer():
+    global TIMER
+    window.after_cancel(TIMER)
+    canvas.itemconfig(timer_text, text="00:00")
+    title_label.config(text="Timer")
+    checkmark.config(text="")
+    global REPS
+    REPS = 0
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 def start_timer():
@@ -41,9 +50,14 @@ def count_down(count):
 
     canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec}")
     if count > 0:
-        window.after(1000, count_down, count - 1)
+        TIMER = window.after(1000, count_down, count - 1)
     else:
         start_timer()
+        mark = ""
+        work_sessions = floor(REPS/2)
+        for n in range(work_sessions):
+            mark += "✔"
+        checkmark.config(text=mark, font=("", 24))
 
 # ---------------------------- UI SETUP ------------------------------- #
 #Create Window
@@ -66,11 +80,11 @@ canvas.grid(column=1, row=1)
 start_button = tk.Button(text="Start", highlightthickness=0, command=start_timer)
 start_button.grid(column=0, row=2)
 
-reset_button = tk.Button(text="Restart", highlightthickness=0)
+reset_button = tk.Button(text="Restart", highlightthickness=0, command=reset_timer)
 reset_button.grid(column=2, row=2)
 
 #Creating checkmark
-checkmark = tk.Label(text="✔", fg=GREEN, bg=YELLOW)
+checkmark = tk.Label(fg=GREEN, bg=YELLOW)
 checkmark.grid(column=1, row=3)
 
 window.mainloop()
